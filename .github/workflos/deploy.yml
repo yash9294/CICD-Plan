@@ -1,0 +1,29 @@
+name: "Deploy to aws"
+
+#Trigger the workflow from the github UI
+
+on: workflow_dispatch
+
+jobs:
+     deploy:
+         runs-on: self-hosted
+         steps:
+             - name: "Setup nodejs"
+               uses: actions/setup-node@v4
+               with:
+                   node-version: "18"
+
+             - name: "Checkout code"
+               uses: action/checkout@v2
+
+             - name: "Install dependencies"
+               run: npm install
+
+             - name: "Install pm2 globally"
+               run: npm install pm2 -g
+
+             - name: "Run the tests"
+               run: npm test
+
+             - name: "Deploy to aws"
+               run: pm2 start src/index.js
